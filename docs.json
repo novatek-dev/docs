@@ -2,13 +2,33 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "NovaCloud EIP",
-  "description": "Novatek EIP Enterprise Integration Platform - Next.js + Prisma + Supabase + Neo4j + AI/RAG",
+  "description": "Novatek EIP Enterprise Integration Platform - 5-Container Self-Hosted Architecture with Next.js, PostgreSQL, Neo4j, and AI/RAG",
   "colors": {
     "primary": "#9C27B0",
     "light": "#10B981",
-    "dark": "#6A1B9A"
+    "dark": "#6A1B9A",
+    "background": {
+      "light": "#FFFFFF",
+      "dark": "#0a0a0a"
+    }
   },
   "favicon": "/favicon.svg",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "/"
+  },
+  "modeToggle": {
+    "default": "light"
+  },
+  "topbarCtaButton": {
+    "type": "github",
+    "url": "https://github.com/novatek-dev/novacloud-eip"
+  },
+  "feedback": {
+    "suggestEdit": true,
+    "raiseIssue": true
+  },
   "navigation": {
     "tabs": [
       {
@@ -23,56 +43,43 @@
             ]
           },
           {
-            "group": "Architecture Overview",
+            "group": "Architecture & Design",
             "pages": [
               "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Docker Containers",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
+              "essentials/navigation",
               "essentials/images"
             ]
           },
           {
-            "group": "Databases",
+            "group": "Container Details",
             "pages": [
+              "essentials/code",
+              "essentials/markdown",
               "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI & RAG",
-            "pages": [
-              "ai-tools/cursor"
-            ]
-          },
-          {
-            "group": "Security & Monitoring",
-            "pages": [
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
             ]
           }
         ]
       },
       {
-        "tab": "API",
+        "tab": "API Reference",
         "groups": [
           {
-            "group": "REST API",
+            "group": "Overview",
             "pages": [
               "api-reference/introduction"
             ]
           },
           {
-            "group": "Endpoints",
+            "group": "Core Endpoints",
             "pages": [
               "api-reference/endpoint/get",
               "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
+              "api-reference/endpoint/delete"
+            ]
+          },
+          {
+            "group": "Events",
+            "pages": [
               "api-reference/endpoint/webhook"
             ]
           }
@@ -87,19 +94,28 @@
           "icon": "github"
         },
         {
-          "anchor": "Novatek",
+          "anchor": "Website",
           "href": "https://novatek.com",
-          "icon": "link"
+          "icon": "globe"
+        },
+        {
+          "anchor": "Support",
+          "href": "mailto:support@novatek.com",
+          "icon": "envelope"
         }
       ]
     }
   },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
   "navbar": {
     "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/novatek-dev/novacloud-eip"
+      },
+      {
+        "label": "Issues",
+        "href": "https://github.com/novatek-dev/novacloud-eip/issues"
+      },
       {
         "label": "Support",
         "href": "mailto:support@novatek.com"
@@ -107,27 +123,51 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.novatek.com"
+      "label": "Start Building",
+      "href": "/quickstart"
     }
   },
-  "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+  "anchors": [
+    {
+      "name": "Community",
+      "icon": "slack",
+      "color": "#9C27B0",
+      "url": "https://github.com/novatek-dev"
+    },
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "url": "https://github.com/novatek-dev/novacloud-eip"
+    }
+  ],
+  "openapi": [
+    "/api-reference/openapi.json"
+  ],
+  "api": {
+    "auth": {
+      "method": "bearer"
+    },
+    "playground": {
+      "mode": "show"
+    }
+  },
+  "footerSocials": {
+    "github": "https://github.com/novatek-dev",
+    "linkedin": "https://linkedin.com/company/novatek-dev",
+    "website": "https://novatek.com"
   },
   "footer": {
+    "copyright": "© 2024 Novatek. All rights reserved.",
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "github": "https://github.com/novatek-dev",
+      "linkedin": "https://linkedin.com/company/novatek-dev",
+      "website": "https://novatek.com"
     }
-  }
+  },
+  "analytics": {
+    "gtm": {
+      "tagId": "GTM-XXXXXXXX"
+    }
+  },
+  "backgroundImage": "/images/background.png"
 }

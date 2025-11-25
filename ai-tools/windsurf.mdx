@@ -1,96 +1,329 @@
 ---
-title: "Windsurf setup"
-description: "Configure Windsurf for your documentation workflow"
-icon: "water"
+title: 'Deployment & Operations'
+description: 'Self-Hosted Deployment and Operational Guidelines for NovaCloud EIP'
+icon: 'rocket'
 ---
 
-Configure Windsurf's Cascade AI assistant to help you write and maintain documentation. This guide shows how to set up Windsurf specifically for your Mintlify documentation workflow.
+## Self-Hosted Deployment
 
-## Prerequisites
+NovaCloud EIP is designed for self-hosted deployment on your infrastructure with complete control and data sovereignty.
 
-- Windsurf editor installed
-- Access to your documentation repository
+### System Requirements
 
-## Workspace rules
+**Hardware:**
+- CPU: 4+ cores (8+ recommended)
+- RAM: 16GB minimum (32GB recommended)
+- Storage: 100GB+ SSD
+- Network: 10Mbps+ connection
 
-Create workspace rules that provide Windsurf with context about your documentation project and standards.
+**Software:**
+- Docker & Docker Compose
+- Ubuntu 20.04+ or equivalent
+- Python 3.8+ (for management scripts)
 
-Create `.windsurf/rules.md` in your project root:
+### Pre-Deployment Checklist
 
-````markdown
-# Mintlify technical writing rule
+```bash
+# Verify Docker installation
+docker --version
+docker-compose --version
 
-## Project context
-
-- This is a documentation project on the Mintlify platform
-- We use MDX files with YAML frontmatter  
-- Navigation is configured in `docs.json`
-- We follow technical writing best practices
-
-## Writing standards
-
-- Use second person ("you") for instructions
-- Write in active voice and present tense
-- Start procedures with prerequisites
-- Include expected outcomes for major steps
-- Use descriptive, keyword-rich headings
-- Keep sentences concise but informative
-
-## Required page structure
-
-Every page must start with frontmatter:
-
-```yaml
----
-title: "Clear, specific title"
-description: "Concise description for SEO and navigation"
----
+# Check system resources
+free -h                    # RAM
+df -h                      # Disk
+nproc                      # CPU cores
+uname -a                   # OS info
 ```
 
-## Mintlify components
+## Installation
 
-### Callouts
+### Step 1: Clone Repository
 
-- `<Note>` for helpful supplementary information
-- `<Warning>` for important cautions and breaking changes
-- `<Tip>` for best practices and expert advice  
-- `<Info>` for neutral contextual information
-- `<Check>` for success confirmations
+```bash
+git clone https://github.com/novatek-dev/novacloud-eip.git
+cd novacloud-eip
+```
 
-### Code examples
+### Step 2: Environment Setup
 
-- When appropriate, include complete, runnable examples
-- Use `<CodeGroup>` for multiple language examples
-- Specify language tags on all code blocks
-- Include realistic data, not placeholders
-- Use `<RequestExample>` and `<ResponseExample>` for API docs
+```bash
+# Copy environment template
+cp .env.example .env
 
-### Procedures
+# Edit with your values
+nano .env
+```
 
-- Use `<Steps>` component for sequential instructions
-- Include verification steps with `<Check>` components when relevant
-- Break complex procedures into smaller steps
+Key variables:
+```bash
+# Database
+DATABASE_URL=postgresql://user:securepass@postgres:5432/novacloud
+NEO4J_PASSWORD=secure_neo4j_password
 
-### Content organization
+# API
+NEXT_PUBLIC_API_URL=https://your-domain.com
+API_PORT=3000
 
-- Use `<Tabs>` for platform-specific content
-- Use `<Accordion>` for progressive disclosure
-- Use `<Card>` and `<CardGroup>` for highlighting content
-- Wrap images in `<Frame>` components with descriptive alt text
+# Security
+JWT_SECRET=your_jwt_secret_key_here
+ENCRYPTION_KEY=your_encryption_key_here
 
-## API documentation requirements
+# Optional: Analytics
+GTM_ID=GTM-XXXXXXXX
+```
 
-- Document all parameters with `<ParamField>` 
-- Show response structure with `<ResponseField>`
-- Include both success and error examples
-- Use `<Expandable>` for nested object properties
-- Always include authentication examples
+### Step 3: Deploy Containers
 
-## Quality standards
+```bash
+# Start all services
+docker-compose up -d
 
-- Test all code examples before publishing
-- Use relative paths for internal links
-- Include alt text for all images
-- Ensure proper heading hierarchy (start with h2)
-- Check existing patterns for consistency
-````
+# Verify containers are running
+docker-compose ps
+
+# View startup logs
+docker-compose logs -f
+```
+
+### Step 4: Initialize Databases
+
+```bash
+# Run migrations
+docker-compose exec postgres psql -U novacloud -d novacloud -f /docker-entrypoint-initdb.d/init.sql
+
+# Initialize Neo4j
+docker-compose exec neo4j cypher-shell -u neo4j -p password "CREATE CONSTRAINT IF NOT EXISTS FOR (n:Customer) REQUIRE n.id IS UNIQUE;"
+
+# Download Ollama models
+docker-compose exec ollama ollama pull mistral
+docker-compose exec ollama ollama pull llama2
+
+# Initialize Qdrant collection
+curl -X PUT http://localhost:6333/collections/documents \
+  -H "Content-Type: application/json" \
+  -d '{"vectors": {"size": 1536, "distance": "Cosine"}}'
+```
+
+### Step 5: Verify Installation
+
+```bash
+# Health check
+curl http://localhost:3000/health
+curl http://localhost:5432          # PostgreSQL
+curl http://localhost:7687          # Neo4j
+curl http://localhost:11434/api/tags # Ollama
+curl http://localhost:6333/health   # Qdrant
+```
+
+## Docker Compose Management
+
+### Scale Services
+
+```bash
+# Scale multiple Next.js instances
+docker-compose up -d --scale nextjs=3
+
+# View running containers
+docker-compose ps
+```
+
+### Resource Limits
+
+Edit `docker-compose.yml`:
+
+```yaml
+services:
+  nextjs:
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '1'
+          memory: 2G
+
+  postgres:
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+```
+
+## Backup & Recovery
+
+### Automated Backups
+
+```bash
+#!/bin/bash
+# backup.sh
+
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_DIR="/backups/novacloud_$DATE"
+
+mkdir -p "$BACKUP_DIR"
+
+# PostgreSQL backup
+docker-compose exec -T postgres pg_dump \
+  -U novacloud novacloud > "$BACKUP_DIR/postgres.sql"
+
+# Neo4j backup
+docker-compose exec -T neo4j neo4j-admin dump \
+  --database=neo4j \
+  --to-path=/var/lib/neo4j/backups
+
+# Qdrant backup
+cp -r /data/qdrant/* "$BACKUP_DIR/qdrant_backup"
+
+# Upload to cloud storage (optional)
+aws s3 sync "$BACKUP_DIR" s3://your-bucket/backups/
+
+# Cleanup old backups (keep 30 days)
+find /backups -maxdepth 1 -type d -mtime +30 -exec rm -rf {} \;
+
+echo "Backup completed: $BACKUP_DIR"
+```
+
+### Recovery Procedure
+
+```bash
+# Restore PostgreSQL
+docker-compose exec -T postgres psql -U novacloud novacloud < /backups/postgres.sql
+
+# Restore Neo4j
+docker-compose exec -T neo4j neo4j-admin load \
+  --from-path=/var/lib/neo4j/backups \
+  --database=neo4j
+
+# Verify restoration
+docker-compose restart
+```
+
+## SSL/TLS Configuration
+
+### Self-Signed Certificate (Development)
+
+```bash
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365
+```
+
+### Let's Encrypt (Production)
+
+```bash
+# Using Certbot
+sudo certbot certonly --standalone -d your-domain.com
+
+# Configure Nginx
+server {
+  listen 443 ssl;
+  ssl_certificate /etc/letsencrypt/live/your-domain.com/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/your-domain.com/privkey.pem;
+  
+  location / {
+    proxy_pass http://localhost:3000;
+  }
+}
+```
+
+## Updates & Upgrades
+
+```bash
+# Check for updates
+git pull origin main
+
+# Rebuild containers
+docker-compose build --no-cache
+
+# Apply migrations
+npm run prisma:migrate
+
+# Restart services
+docker-compose restart
+```
+
+## Troubleshooting
+
+### Container fails to start
+
+```bash
+# Check logs
+docker-compose logs [service-name]
+
+# Inspect container
+docker inspect [container-id]
+
+# Restart service
+docker-compose restart [service-name]
+```
+
+### Database connection issues
+
+```bash
+# Test PostgreSQL connection
+docker-compose exec postgres psql -U novacloud -c "SELECT 1;"
+
+# Check network connectivity
+docker-compose exec nextjs ping postgres
+```
+
+### Out of disk space
+
+```bash
+# Check disk usage
+du -sh /data/*
+
+# Clean up Docker
+docker system prune -a
+
+# Rotate logs
+truncate -s 0 /var/lib/docker/containers/*/*-json.log
+```
+
+## Performance Optimization
+
+```bash
+# PostgreSQL connection pooling (PgBouncer)
+docker run -d --name pgbouncer \
+  -e PGBOUNCER_POOL_MODE=transaction \
+  -e PGBOUNCER_MAX_CLIENT_CONN=1000 \
+  pgbouncer:latest
+
+# Redis caching (optional)
+docker run -d --name redis \
+  -p 6379:6379 \
+  redis:latest
+```
+
+## Monitoring & Maintenance
+
+```bash
+# Weekly maintenance
+docker system prune           # Clean up unused data
+docker volume prune          # Remove orphaned volumes
+docker image prune            # Remove dangling images
+
+# Check logs regularly
+docker-compose logs --tail=100 -f
+
+# Monitor disk space
+watch -n 60 'df -h | grep /dev/'
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+
+<Card title="Quickstart" icon="rocket" href="/quickstart">
+  5-minute setup guide
+</Card>
+
+<Card title="Architecture" icon="sitemap" href="/essentials/settings">
+  Detailed architecture overview
+</Card>
+
+<Card title="Security" icon="shield" href="/ai-tools/claude-code">
+  Security configuration
+</Card>
+
+</CardGroup>

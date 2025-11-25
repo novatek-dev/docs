@@ -1,110 +1,237 @@
 ---
-title: "Reusable snippets"
-description: "Reusable, custom snippets to keep content in sync"
+title: "Common Snippets"
+description: "Reusable Code Snippets for NovaCloud EIP Development"
 icon: "recycle"
 ---
 
-import SnippetIntro from '/snippets/snippet-intro.mdx';
+## Docker Commands
 
-<SnippetIntro />
+### Container Management
+```bash
+# Start all containers
+docker-compose up -d
 
-## Creating a custom snippet
+# Stop all containers
+docker-compose down
 
-**Pre-condition**: You must create your snippet file in the `snippets` directory.
+# View container status
+docker-compose ps
 
-<Note>
-  Any page in the `snippets` directory will be treated as a snippet and will not
-  be rendered into a standalone page. If you want to create a standalone page
-  from the snippet, import the snippet into another file and call it as a
-  component.
-</Note>
+# View container logs
+docker-compose logs -f [service-name]
 
-### Default export
+# Execute command in container
+docker-compose exec [service] [command]
 
-1. Add content to your snippet file that you want to re-use across multiple
-   locations. Optionally, you can add variables that can be filled in via props
-   when you import the snippet.
-
-```mdx snippets/my-snippet.mdx
-Hello world! This is my content I want to reuse across pages. My keyword of the
-day is {word}.
+# Rebuild containers
+docker-compose build --no-cache
 ```
 
-<Warning>
-  The content that you want to reuse must be inside the `snippets` directory in
-  order for the import to work.
-</Warning>
+### Common Issues
+```bash
+# View all running processes on port 3000
+lsof -i :3000
 
-2. Import the snippet into your destination file.
+# Kill process on port 3000
+kill -9 [PID]
 
-```mdx destination-file.mdx
----
-title: My title
-description: My Description
----
+# Check Docker system resources
+docker system df
 
-import MySnippet from '/snippets/path/to/my-snippet.mdx';
-
-## Header
-
-Lorem impsum dolor sit amet.
-
-<MySnippet word="bananas" />
+# Prune unused images
+docker system prune -a
 ```
 
-### Reusable variables
+## PostgreSQL Quick Commands
 
-1. Export a variable from your snippet file:
+```bash
+# Connect to database
+psql -h localhost -U novacloud -d novacloud
 
-```mdx snippets/path/to/custom-variables.mdx
-export const myName = 'my name';
+# List all tables
+\dt
 
-export const myObject = { fruit: 'strawberries' };
+# Export data
+pg_dump postgresql://user:pass@localhost/db > backup.sql
+
+# Restore data
+psql postgresql://user:pass@localhost/db < backup.sql
+
+# Check database size
+SELECT pg_size_pretty(pg_database_size('novacloud'));
 ```
 
-2. Import the snippet from your destination file and use the variable:
+## Neo4j Cypher Patterns
 
-```mdx destination-file.mdx
----
-title: My title
-description: My Description
----
-
-import { myName, myObject } from '/snippets/path/to/custom-variables.mdx';
-
-Hello, my name is {myName} and I like {myObject.fruit}.
+### Find High-Value Customers
+```cypher
+MATCH (c:Customer)-[r:PLACED]->(o:Order)
+WITH c, COUNT(o) as orders, SUM(o.amount) as total
+WHERE total > 10000
+RETURN c.name, orders, total
+ORDER BY total DESC
 ```
 
-### Reusable components
-
-1. Inside your snippet file, create a component that takes in props by exporting
-   your component in the form of an arrow function.
-
-```mdx snippets/custom-component.mdx
-export const MyComponent = ({ title }) => (
-  <div>
-    <h1>{title}</h1>
-    <p>... snippet content ...</p>
-  </div>
-);
+### Network Analysis
+```cypher
+MATCH (n)-[r]->(m)
+RETURN n, COUNT(r) as connections
+ORDER BY connections DESC
+LIMIT 10
 ```
 
-<Warning>
-  MDX does not compile inside the body of an arrow function. Stick to HTML
-  syntax when you can or use a default export if you need to use MDX.
-</Warning>
+### Shortest Path
+```cypher
+MATCH p = shortestPath((a:Customer)-[*]-(b:Customer))
+WHERE a.id = 'cust1' AND b.id = 'cust2'
+RETURN p
+```
 
-2. Import the snippet into your destination file and pass in the props
+## Environment Variables Template
 
-```mdx destination-file.mdx
----
-title: My title
-description: My Description
----
+```bash
+# Database
+DATABASE_URL=postgresql://user:password@postgres:5432/novacloud
+NEO4J_URI=bolt://neo4j:7687
+NEO4J_USERNAME=neo4j
+NEO4J_PASSWORD=your_secure_password
 
-import { MyComponent } from '/snippets/custom-component.mdx';
+# AI/LLM
+OLLAMA_BASE_URL=http://ollama:11434
+QDRANT_URL=http://qdrant:6333
 
-Lorem ipsum dolor sit amet.
+# Next.js
+NEXT_PUBLIC_API_URL=http://localhost:3000
+NODE_ENV=development
 
-<MyComponent title={'Custom title'} />
+# Monitoring
+MONITORING_API_PORT=3001
+
+# Supabase
+SUPABASE_URL=http://localhost:8000
+SUPABASE_ANON_KEY=your_key_here
+```
+
+## API Request Examples
+
+### cURL Commands
+```bash
+# Get all customers
+curl -X GET http://localhost:3000/api/customers \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# Create new customer
+curl -X POST http://localhost:3000/api/customers \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{"name": "Acme Corp", "email": "contact@acme.com"}'
+
+# Query Neo4j relationships
+curl -X POST http://localhost:3000/api/graph/query \
+  -H "Content-Type: application/json" \
+  -d '{"cypher": "MATCH (c:Customer) RETURN c LIMIT 10"}'
+
+# Semantic search via LangChain
+curl -X POST http://localhost:3000/api/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "Find orders over $10000", "limit": 5}'
+```
+
+## Server Health Check
+
+```bash
+# Check all services
+echo "=== Container Status ===" && \
+docker-compose ps && \
+echo "=== Service Health ===" && \
+curl http://localhost:3000/health && \
+curl http://localhost:11434/api/tags && \
+echo "=== System Resources ===" && \
+docker stats --no-stream
+```
+
+## New Developer Onboarding
+
+```bash
+# Clone repository
+git clone https://github.com/novatek-dev/novacloud-eip.git
+cd novacloud-eip
+
+# Setup environment
+cp .env.example .env
+
+# Install dependencies
+npm install
+
+# Start development environment
+docker-compose up -d
+
+# Initialize database
+npm run prisma:migrate
+
+# Start development server
+npm run dev
+
+# View documentation
+cd ../docs && mint dev
+```
+
+## LangChain RAG Integration
+
+### Text Embedding
+```typescript
+import { OllamaEmbeddings } from '@langchain/community/embeddings/ollama';
+
+const embeddings = new OllamaEmbeddings({
+  model: 'mistral',
+  baseUrl: 'http://ollama:11434'
+});
+
+const vectors = await embeddings.embedDocuments(['text1', 'text2']);
+```
+
+### Vector Search
+```typescript
+import { QdrantVectorStore } from '@langchain/community/vectorstores/qdrant';
+
+const vectorStore = new QdrantVectorStore(embeddings, {
+  url: 'http://qdrant:6333',
+  collectionName: 'novacloud_embeddings'
+});
+
+const results = await vectorStore.similaritySearch('query', 5);
+```
+
+## Prisma Common Operations
+
+```typescript
+// Find with relations
+const customer = await prisma.customer.findUnique({
+  where: { id },
+  include: { orders: true, invoices: true }
+});
+
+// Create with nested data
+const order = await prisma.order.create({
+  data: {
+    customerId: id,
+    items: {
+      create: [
+        { productId: 'p1', quantity: 2 },
+        { productId: 'p2', quantity: 1 }
+      ]
+    }
+  }
+});
+
+// Update multiple
+await prisma.order.updateMany({
+  where: { status: 'pending' },
+  data: { status: 'processing' }
+});
+
+// Delete with cascade
+await prisma.customer.delete({
+  where: { id }
+});
 ```
