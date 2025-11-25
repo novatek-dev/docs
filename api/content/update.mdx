@@ -1,0 +1,32 @@
+---
+title: "İçerik Güncelle"
+description: "PUT /content/:id"
+---
+
+# İçerik Güncelle
+
+Mevcut içeriği güncelleyin.
+
+## Endpoint
+
+```bash
+PUT /api/v1/content/{id}
+```
+
+## Body
+
+```json
+{
+  "title": "Yeni Başlık",
+  "body": "Güncellenmiş içerik"
+}
+```
+
+## Yanıt
+
+```json
+{
+  "id": "123",
+  "updated_at": "2024-01-01T12:00:00Z"
+}
+```

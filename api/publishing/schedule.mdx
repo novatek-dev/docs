@@ -1,0 +1,32 @@
+---
+title: "Yayın Zamanla"
+description: "POST /publishing/schedule"
+---
+
+# Yayın Zamanla
+
+İçeriği belirli tarihte yayınlayın.
+
+## Endpoint
+
+```bash
+POST /api/v1/publishing/schedule
+```
+
+## Body
+
+```json
+{
+  "content_id": "123",
+  "publish_at": "2024-12-25T10:00:00Z"
+}
+```
+
+## Yanıt
+
+```json
+{
+  "scheduled": true,
+  "publish_at": "2024-12-25T10:00:00Z"
+}
+```

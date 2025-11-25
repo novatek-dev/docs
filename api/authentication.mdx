@@ -1,0 +1,28 @@
+---
+title: "Kimlik Doğrulama"
+description: "API Authentication"
+---
+
+# Kimlik Doğrulama
+
+API isteklerini kimlik doğrulaması yaparak güvenleştirin.
+
+## Bearer Token
+
+Header'a token ekleyin:
+
+```bash
+Authorization: Bearer {token}
+```
+
+## API Key
+
+Alternatif olarak query parametresinde:
+
+```bash
+?api_key={key}
+```
+
+## Token Yenileme
+
+Token süresi dolduğunda yenileyin.

@@ -1,0 +1,32 @@
+---
+title: "Onayla"
+description: "POST /publishing/approve"
+---
+
+# Onayla
+
+İçeriği onaylayın.
+
+## Endpoint
+
+```bash
+POST /api/v1/publishing/approve
+```
+
+## Body
+
+```json
+{
+  "content_id": "123",
+  "status": "approved"
+}
+```
+
+## Yanıt
+
+```json
+{
+  "approved": true,
+  "by": "user123"
+}
+```

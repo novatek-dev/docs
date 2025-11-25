@@ -1,0 +1,28 @@
+---
+title: "Medya Listesi"
+description: "GET /media"
+---
+
+# Medya Listesi
+
+Tüm medya dosyalarını listeleyin.
+
+## Endpoint
+
+```bash
+GET /api/v1/media
+```
+
+## Parametreler
+
+- `type`: Dosya türü filtresi
+- `page`: Sayfa numarası
+
+## Yanıt
+
+```json
+{
+  "data": [...],
+  "total": 50
+}
+```

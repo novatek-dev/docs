@@ -1,0 +1,28 @@
+---
+title: "Yayın Geçmişi"
+description: "GET /publishing/history"
+---
+
+# Yayın Geçmişi
+
+İçeriğin yayın geçmişini görüntüleyin.
+
+## Endpoint
+
+```bash
+GET /api/v1/publishing/history/{id}
+```
+
+## Yanıt
+
+```json
+{
+  "history": [
+    {
+      "version": 1,
+      "published_at": "2024-01-01",
+      "by": "user123"
+    }
+  ]
+}
+```

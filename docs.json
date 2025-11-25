@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "NovaCloud EIP",
-  "description": "Novatek EIP Enterprise Integration Platform - 5-Container Self-Hosted Architecture with Next.js, PostgreSQL, Neo4j, and AI/RAG",
+  "description": "Novatek EIP Enterprise Integration Platform - İçerik Yönetim ve Yayınlama Sistemi",
   "colors": {
     "primary": "#9C27B0",
     "light": "#10B981",
@@ -12,99 +12,117 @@
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
   },
-  "modeToggle": {
-    "default": "light"
-  },
-  "topbarCtaButton": {
-    "type": "github",
-    "url": "https://github.com/novatek-dev/novacloud-eip"
-  },
-  "feedback": {
-    "suggestEdit": true,
-    "raiseIssue": true
-  },
-  "quicklinks": [
-    {
-      "name": "Hızlı Başlangıç",
-      "url": "/quickstart",
-      "icon": "rocket"
-    },
-    {
-      "name": "Mimarilere Gövdeyle",
-      "url": "/essentials/settings",
-      "icon": "building"
-    },
-    {
-      "name": "API Referansı",
-      "url": "/api-reference/introduction",
-      "icon": "code"
-    },
-    {
-      "name": "Geliştirici Kılavuzu",
-      "url": "/development",
-      "icon": "laptop-code"
-    }
-  ],
   "navigation": {
     "tabs": [
       {
-        "tab": "Platform",
+        "tab": "İçerik",
         "groups": [
           {
-            "group": "Getting Started",
+            "group": "Genel",
             "pages": [
               "index",
-              "quickstart",
-              "development"
+              "quickstart"
             ]
           },
           {
-            "group": "Architecture & Design",
+            "group": "İçerik Yönetimi",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/images"
+              "content/create",
+              "content/edit",
+              "content/delete",
+              "content/categories"
             ]
           },
           {
-            "group": "Container Details",
+            "group": "Yayınlama",
             "pages": [
-              "essentials/code",
-              "essentials/markdown",
-              "essentials/reusable-snippets"
+              "publishing/workflow",
+              "publishing/scheduling",
+              "publishing/approval",
+              "publishing/versioning"
             ]
           },
           {
-            "group": "Advanced Topics",
+            "group": "Medya & Varlıklar",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "media/upload",
+              "media/gallery",
+              "media/optimization"
             ]
           }
         ]
       },
       {
-        "tab": "API Reference",
+        "tab": "Ayarlar",
         "groups": [
           {
-            "group": "Overview",
+            "group": "Sistem",
             "pages": [
-              "api-reference/introduction"
+              "settings/general",
+              "settings/branding",
+              "settings/seo"
             ]
           },
           {
-            "group": "Core Endpoints",
+            "group": "Yetkilendirme",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete"
+              "settings/users",
+              "settings/roles",
+              "settings/permissions"
             ]
           },
           {
-            "group": "Events",
+            "group": "Entegrasyonlar",
             "pages": [
-              "api-reference/endpoint/webhook"
+              "settings/api",
+              "settings/webhooks",
+              "settings/third-party"
+            ]
+          },
+          {
+            "group": "Analitikler",
+            "pages": [
+              "analytics/overview",
+              "analytics/traffic",
+              "analytics/engagement",
+              "analytics/reports"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Referansı",
+        "groups": [
+          {
+            "group": "Giriş",
+            "pages": [
+              "api/introduction",
+              "api/authentication"
+            ]
+          },
+          {
+            "group": "İçerik API",
+            "pages": [
+              "api/content/list",
+              "api/content/create",
+              "api/content/update",
+              "api/content/delete"
+            ]
+          },
+          {
+            "group": "Yayın API",
+            "pages": [
+              "api/publishing/schedule",
+              "api/publishing/approve",
+              "api/publishing/history"
+            ]
+          },
+          {
+            "group": "Medya API",
+            "pages": [
+              "api/media/upload",
+              "api/media/list",
+              "api/media/delete"
             ]
           }
         ]
@@ -123,7 +141,7 @@
           "icon": "globe"
         },
         {
-          "anchor": "Support",
+          "anchor": "Destek",
           "href": "mailto:support@novatek.com",
           "icon": "envelope"
         }
@@ -137,56 +155,20 @@
         "href": "https://github.com/novatek-dev/novacloud-eip"
       },
       {
-        "label": "Issues",
+        "label": "Sorunlar",
         "href": "https://github.com/novatek-dev/novacloud-eip/issues"
       },
       {
-        "label": "Support",
+        "label": "Destek",
         "href": "mailto:support@novatek.com"
       }
     ]
   },
-  "anchors": [
-    {
-      "name": "Community",
-      "icon": "slack",
-      "color": "#9C27B0",
-      "url": "https://github.com/novatek-dev"
-    },
-    {
-      "name": "GitHub",
-      "icon": "github",
-      "url": "https://github.com/novatek-dev/novacloud-eip"
-    }
-  ],
-  "openapi": [
-    "/api-reference/openapi.json"
-  ],
-  "api": {
-    "auth": {
-      "method": "bearer"
-    },
-    "playground": {
-      "mode": "show"
-    }
-  },
-  "footerSocials": {
-    "github": "https://github.com/novatek-dev",
-    "linkedin": "https://linkedin.com/company/novatek-dev",
-    "website": "https://novatek.com"
-  },
   "footer": {
-    "copyright": "© 2024 Novatek. All rights reserved.",
     "socials": {
       "github": "https://github.com/novatek-dev",
       "linkedin": "https://linkedin.com/company/novatek-dev",
       "website": "https://novatek.com"
     }
-  },
-  "analytics": {
-    "gtm": {
-      "tagId": "GTM-XXXXXXXX"
-    }
-  },
-  "backgroundImage": "/images/background.png"
+  }
 }

@@ -1,0 +1,31 @@
+---
+title: "API Giriş"
+description: "API'ye başlangıç"
+---
+
+# API Giriş
+
+NovaCloud EIP API'sini kullanmaya başlayın.
+
+## Kimlik Doğrulama
+
+Tüm isteklerde API anahtarı kullanın:
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+## Base URL
+
+```
+https://api.novacloud.com/v1
+```
+
+## Rate Limiting
+
+- 1000 istek/saat
+- Başlık: `X-RateLimit-Remaining`
+
+## Hata Yönetimi
+
+API hataları HTTP status kodları döndürür.

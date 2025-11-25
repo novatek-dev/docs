@@ -1,151 +1,28 @@
 ---
-title: "Quickstart"
-description: "Deploy NovaCloud EIP in minutes"
+title: "Hızlı Başlangıç"
+description: "5 dakikada kurulum"
 ---
 
-## Get started in 5 minutes
+# Hızlı Başlangıç
 
-Set up your NovaCloud EIP instance and start processing enterprise data.
+NovaCloud EIP ile hızlı şekilde başlayın.
 
-### Step 1: Prerequisites
+## 1. Sisteme Giriş
 
-<AccordionGroup>
-  <Accordion icon="server" title="System Requirements">
-    - Docker & Docker Compose installed
-    - Minimum 16GB RAM
-    - 50GB free disk space
-    - Ubuntu 20.04+ or similar Linux distribution
-    
-    Check installation:
-    ```bash
-    docker --version
-    docker-compose --version
-    ```
-  </Accordion>
-  
-  <Accordion icon="copy" title="Clone Repository">
-    ```bash
-    git clone https://github.com/novatek-dev/novacloud-eip.git
-    cd novacloud-eip
-    ```
-  </Accordion>
-</AccordionGroup>
+Hesabınız ile giriş yapın ve dashboard'a erişin.
 
-### Step 2: Configure Environment
+## 2. İlk İçerik
 
-<AccordionGroup>
-  <Accordion icon="file" title="Setup .env File">
-    1. Copy the environment template:
-    ```bash
-    cp .env.example .env
-    ```
-    
-    2. Update key variables:
-    ```env
-    NEXT_PUBLIC_API_URL=http://localhost:3000
-    DATABASE_URL=postgresql://user:password@postgres:5432/novacloud
-    NEO4J_URI=bolt://neo4j:7687
-    OLLAMA_BASE_URL=http://ollama:11434
-    QDRANT_URL=http://qdrant:6333
-    ```
-  </Accordion>
-  
-  <Accordion icon="palette" title="Update Configuration">
-    Edit `docker-compose.yml`:
-    - Set resource limits per container
-    - Configure port mappings
-    - Update volume mounts for data persistence
-  </Accordion>
-</AccordionGroup>
+Yeni içerik oluşturmak için [burada](/content/create) tıklayın.
 
-### Step 3: Deploy Containers
+## 3. Yayınlama
 
-<AccordionGroup>
-  <Accordion icon="cube" title="Start All Services">
-    ```bash
-    docker-compose up -d
-    ```
-    
-    Verify all containers are running:
-    ```bash
-    docker-compose ps
-    ```
-    
-    Expected output:
-    - ✅ Container 1: Next.js (Port 3000)
-    - ✅ Container 2: Supabase (Port 5432)
-    - ✅ Container 3: Ollama (Port 11434)
-    - ✅ Container 4: Qdrant (Port 6333)
-    - ✅ Container 5: Neo4j (Port 7687)
-  </Accordion>
-  
-  <Accordion icon="check" title="Verify Setup">
-    ```bash
-    # Check Next.js app
-    curl http://localhost:3000
-    
-    # Check database connection
-    docker-compose logs postgres
-    
-    # Check Ollama models
-    curl http://localhost:11434/api/tags
-    ```
-  </Accordion>
-</AccordionGroup>
+İçeriğinizi hazırladıktan sonra [yayın işlemi](/publishing/workflow) gerçekleştirin.
 
-### Step 4: Import Data
+## 4. İzleme
 
-<AccordionGroup>
-  <Accordion icon="database" title="Load Initial Snapshot">
-    1. Place your SQL snapshot in `./snapshots/` directory
-    2. Run the import workflow:
-    ```bash
-    docker-compose exec postgres psql -U novacloud -f /snapshots/data.sql
-    ```
-  </Accordion>
-  
-  <Accordion icon="bolt" title="Initialize LLM Models">
-    ```bash
-    # Download and cache embedding model
-    curl http://localhost:11434/api/pull -d '{"name": "mistral"}'
-    curl http://localhost:11434/api/pull -d '{"name": "llama2"}'
-    ```
-  </Accordion>
-</AccordionGroup>
+Analitiklerde içeriğinizin performansını takip edin.
 
-### Step 5: Access Dashboard
+## 5. Optimizasyon
 
-Your NovaCloud EIP is ready! Access the interfaces:
-
-| Service | URL | Purpose |
-|---------|-----|---------|
-| **Web App** | http://localhost:3000 | Main dashboard |
-| **Neo4j Browser** | http://localhost:7474 | Graph visualization |
-| **Supabase Studio** | http://localhost:8000 | Database management |
-| **API Docs** | http://localhost:3000/api/docs | REST API reference |
-
-## Next Steps
-
-<CardGroup cols={2}>
-
-<Card title="Architecture Overview" icon="sitemap" href="/essentials/settings">
-  Understand the 5-container architecture and data flow.
-</Card>
-
-<Card title="Database Setup" icon="database" href="/essentials/navigation">
-  Configure Supabase and Neo4j for your use case.
-</Card>
-
-<Card title="AI & RAG Configuration" icon="robot" href="/ai-tools/cursor">
-  Set up LangChain, Ollama, and vector embeddings.
-</Card>
-
-<Card title="API Reference" icon="code" href="/api-reference/introduction">
-  Integrate with external systems via REST API.
-</Card>
-
-</CardGroup>
-
-<Note>
-  **Troubleshooting?** Check our [development guide](/development) or [contact support](mailto:support@novatek.com).
-</Note>
+İstatistiklere göre içeriğinizi iyileştirin.

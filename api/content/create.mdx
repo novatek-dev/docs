@@ -1,0 +1,34 @@
+---
+title: "İçerik Oluştur"
+description: "POST /content"
+---
+
+# İçerik Oluştur
+
+Yeni içerik oluşturun.
+
+## Endpoint
+
+```bash
+POST /api/v1/content
+```
+
+## Body
+
+```json
+{
+  "title": "Başlık",
+  "body": "İçerik",
+  "category": "blog"
+}
+```
+
+## Yanıt
+
+```json
+{
+  "id": "123",
+  "title": "Başlık",
+  "status": "draft"
+}
+```

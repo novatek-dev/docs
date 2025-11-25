@@ -1,0 +1,28 @@
+---
+title: "Medya Yükle"
+description: "POST /media/upload"
+---
+
+# Medya Yükle
+
+Dosya yükleyin.
+
+## Endpoint
+
+```bash
+POST /api/v1/media/upload
+```
+
+## Body
+
+`multipart/form-data` ile dosya gönderin.
+
+## Yanıt
+
+```json
+{
+  "id": "file123",
+  "url": "https://...",
+  "size": 1024
+}
+```
