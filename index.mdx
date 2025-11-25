@@ -1,97 +1,89 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: NovaCloud EIP
+description: 'Novatek EIP - Next.js + Prisma + Supabase + Neo4j + LangChain + Ollama + Qdrant'
 ---
 
-## Setting up
+## 🚀 NovaCloud EIP Platform
 
-Get your documentation site up and running in minutes.
+**Novatek Enterprise Integration Platform** - Modern AI-powered business intelligence platform with self-hosted containerized architecture.
 
-<Card
-  title="Start here"
-  icon="rocket"
-  href="/quickstart"
-  horizontal
->
-  Follow our three step quickstart guide.
-</Card>
-
-## Make it yours
-
-Design a docs site that looks great and empowers your users.
+### 🏗️ Technology Stack
 
 <Columns cols={2}>
   <Card
-    title="Edit locally"
-    icon="pen-to-square"
-    href="/development"
+    title="🌐 Frontend & Web App"
+    icon="browser"
   >
-    Edit your docs locally and preview them in real time.
+    Next.js + Prisma ORM + Monitoring API
   </Card>
   <Card
-    title="Customize your site"
-    icon="palette"
+    title="🗄️ Databases"
+    icon="database"
+  >
+    Supabase/PostgreSQL + Neo4j Graph DB
+  </Card>
+  <Card
+    title="🤖 AI & RAG"
+    icon="robot"
+  >
+    LangChain + Ollama LLM + Qdrant Vector DB
+  </Card>
+  <Card
+    title="🐳 Infrastructure"
+    icon="cube"
+  >
+    Docker (5 Containers) + Security + Monitoring
+  </Card>
+</Columns>
+
+### 📊 Core Features
+
+- **SQL Snapshot Workflow** - Automated daily snapshot processing from Logo ERP/CRM
+- **AI-Powered Analytics** - LangChain + RAG for semantic search and intelligent processing
+- **Real-time Data** - WebSocket support via Supabase Realtime
+- **Graph Analytics** - Neo4j for complex relationship queries
+- **Server Monitoring** - Real-time capacity tracking across enterprise infrastructure
+- **Security First** - Multi-layer security: Firewall, WAF, DDoS protection, Rate limiting
+
+### 🐳 5-Container Architecture
+
+| Container | Purpose | Technologies |
+|-----------|---------|---------------|
+| **Container 1** | Web App | Next.js + Prisma + Monitoring API |
+| **Container 2** | Database | Supabase Stack (PostgreSQL + Auth + API + Realtime) |
+| **Container 3** | AI Layer | Ollama LLM + LangChain + Vector Embedding |
+| **Container 4** | Vector DB | Qdrant (Semantic Search) |
+| **Container 5** | Graph DB | Neo4j (Relationship Analytics) |
+
+### 🎯 Quick Start
+
+<Columns cols={2}>
+  <Card
+    title="Quickstart Guide"
+    icon="rocket"
+    href="/quickstart"
+  >
+    Get started in 5 minutes
+  </Card>
+  <Card
+    title="Architecture Overview"
+    icon="sitemap"
     href="/essentials/settings"
   >
-    Customize the design and colors of your site to match your brand.
-  </Card>
-    <Card
-    title="Set up navigation"
-    icon="map"
-    href="/essentials/navigation"
-  >
-    Organize your docs to help users find what they need and succeed with your product.
+    Deep dive into system design
   </Card>
   <Card
-    title="API documentation"
+    title="API Reference"
     icon="terminal"
     href="/api-reference/introduction"
   >
-    Auto-generate API documentation from OpenAPI specifications.
-  </Card>
-</Columns>
-
-## Create beautiful pages
-
-Everything you need to create world-class documentation.
-
-<Columns cols={2}>
-  <Card
-    title="Write with MDX"
-    icon="pen-fancy"
-    href="/essentials/markdown"
-  >
-    Use MDX to style your docs pages.
+    REST API documentation
   </Card>
   <Card
-    title="Code samples"
+    title="Development Setup"
     icon="code"
-    href="/essentials/code"
+    href="/development"
   >
-    Add sample code to demonstrate how to use your product.
-  </Card>
-  <Card
-    title="Images"
-    icon="image"
-    href="/essentials/images"
-  >
-    Display images and other media.
-  </Card>
-  <Card
-    title="Reusable snippets"
-    icon="recycle"
-    href="/essentials/reusable-snippets"
-  >
-    Write once and reuse across your docs.
+    Setup local environment
   </Card>
 </Columns>
-
-## Need inspiration?
-
-<Card
-  title="See complete examples"
-  icon="stars"
-  href="https://mintlify.com/customers"
->
-  Browse our showcase of exceptional documentation sites.
-</Card>

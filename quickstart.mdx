@@ -1,80 +1,151 @@
 ---
 title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+description: "Deploy NovaCloud EIP in minutes"
 ---
 
-## Get started in three steps
+## Get started in 5 minutes
 
-Get your documentation site running locally and make your first customization.
+Set up your NovaCloud EIP instance and start processing enterprise data.
 
-### Step 1: Set up your local environment
+### Step 1: Prerequisites
 
 <AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
+  <Accordion icon="server" title="System Requirements">
+    - Docker & Docker Compose installed
+    - Minimum 16GB RAM
+    - 50GB free disk space
+    - Ubuntu 20.04+ or similar Linux distribution
     
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
+    Check installation:
+    ```bash
+    docker --version
+    docker-compose --version
+    ```
   </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
+  
+  <Accordion icon="copy" title="Clone Repository">
+    ```bash
+    git clone https://github.com/novatek-dev/novacloud-eip.git
+    cd novacloud-eip
+    ```
   </Accordion>
 </AccordionGroup>
 
-### Step 2: Deploy your changes
+### Step 2: Configure Environment
 
 <AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
+  <Accordion icon="file" title="Setup .env File">
+    1. Copy the environment template:
+    ```bash
+    cp .env.example .env
+    ```
     
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
-
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
-
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
+    2. Update key variables:
+    ```env
+    NEXT_PUBLIC_API_URL=http://localhost:3000
+    DATABASE_URL=postgresql://user:password@postgres:5432/novacloud
+    NEO4J_URI=bolt://neo4j:7687
+    OLLAMA_BASE_URL=http://ollama:11434
+    QDRANT_URL=http://qdrant:6333
+    ```
+  </Accordion>
+  
+  <Accordion icon="palette" title="Update Configuration">
+    Edit `docker-compose.yml`:
+    - Set resource limits per container
+    - Configure port mappings
+    - Update volume mounts for data persistence
   </Accordion>
 </AccordionGroup>
 
-### Step 3: Go live
+### Step 3: Deploy Containers
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+<AccordionGroup>
+  <Accordion icon="cube" title="Start All Services">
+    ```bash
+    docker-compose up -d
+    ```
+    
+    Verify all containers are running:
+    ```bash
+    docker-compose ps
+    ```
+    
+    Expected output:
+    - ✅ Container 1: Next.js (Port 3000)
+    - ✅ Container 2: Supabase (Port 5432)
+    - ✅ Container 3: Ollama (Port 11434)
+    - ✅ Container 4: Qdrant (Port 6333)
+    - ✅ Container 5: Neo4j (Port 7687)
+  </Accordion>
+  
+  <Accordion icon="check" title="Verify Setup">
+    ```bash
+    # Check Next.js app
+    curl http://localhost:3000
+    
+    # Check database connection
+    docker-compose logs postgres
+    
+    # Check Ollama models
+    curl http://localhost:11434/api/tags
+    ```
+  </Accordion>
+</AccordionGroup>
 
-## Next steps
+### Step 4: Import Data
 
-Now that you have your docs running, explore these key features:
+<AccordionGroup>
+  <Accordion icon="database" title="Load Initial Snapshot">
+    1. Place your SQL snapshot in `./snapshots/` directory
+    2. Run the import workflow:
+    ```bash
+    docker-compose exec postgres psql -U novacloud -f /snapshots/data.sql
+    ```
+  </Accordion>
+  
+  <Accordion icon="bolt" title="Initialize LLM Models">
+    ```bash
+    # Download and cache embedding model
+    curl http://localhost:11434/api/pull -d '{"name": "mistral"}'
+    curl http://localhost:11434/api/pull -d '{"name": "llama2"}'
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Step 5: Access Dashboard
+
+Your NovaCloud EIP is ready! Access the interfaces:
+
+| Service | URL | Purpose |
+|---------|-----|---------|
+| **Web App** | http://localhost:3000 | Main dashboard |
+| **Neo4j Browser** | http://localhost:7474 | Graph visualization |
+| **Supabase Studio** | http://localhost:8000 | Database management |
+| **API Docs** | http://localhost:3000/api/docs | REST API reference |
+
+## Next Steps
 
 <CardGroup cols={2}>
 
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
+<Card title="Architecture Overview" icon="sitemap" href="/essentials/settings">
+  Understand the 5-container architecture and data flow.
 </Card>
 
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
+<Card title="Database Setup" icon="database" href="/essentials/navigation">
+  Configure Supabase and Neo4j for your use case.
 </Card>
 
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
+<Card title="AI & RAG Configuration" icon="robot" href="/ai-tools/cursor">
+  Set up LangChain, Ollama, and vector embeddings.
 </Card>
 
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
+<Card title="API Reference" icon="code" href="/api-reference/introduction">
+  Integrate with external systems via REST API.
 </Card>
 
 </CardGroup>
 
 <Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
+  **Troubleshooting?** Check our [development guide](/development) or [contact support](mailto:support@novatek.com).
 </Note>

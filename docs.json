@@ -1,20 +1,21 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "NovaCloud EIP",
+  "description": "Novatek EIP Enterprise Integration Platform - Next.js + Prisma + Supabase + Neo4j + AI/RAG",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#9C27B0",
+    "light": "#10B981",
+    "dark": "#6A1B9A"
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Platform",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Getting Started",
             "pages": [
               "index",
               "quickstart",
@@ -22,25 +23,35 @@
             ]
           },
           {
-            "group": "Customization",
+            "group": "Architecture Overview",
             "pages": [
               "essentials/settings",
               "essentials/navigation"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Docker Containers",
             "pages": [
               "essentials/markdown",
               "essentials/code",
-              "essentials/images",
+              "essentials/images"
+            ]
+          },
+          {
+            "group": "Databases",
+            "pages": [
               "essentials/reusable-snippets"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "AI & RAG",
             "pages": [
-              "ai-tools/cursor",
+              "ai-tools/cursor"
+            ]
+          },
+          {
+            "group": "Security & Monitoring",
+            "pages": [
               "ai-tools/claude-code",
               "ai-tools/windsurf"
             ]
@@ -48,16 +59,16 @@
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "API",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "REST API",
             "pages": [
               "api-reference/introduction"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Endpoints",
             "pages": [
               "api-reference/endpoint/get",
               "api-reference/endpoint/create",
@@ -71,14 +82,14 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "GitHub",
+          "href": "https://github.com/novatek-dev",
+          "icon": "github"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Novatek",
+          "href": "https://novatek.com",
+          "icon": "link"
         }
       ]
     }
@@ -91,13 +102,13 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:support@novatek.com"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "href": "https://dashboard.novatek.com"
     }
   },
   "contextual": {

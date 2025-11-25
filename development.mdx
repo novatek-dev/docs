@@ -1,94 +1,157 @@
 ---
 title: 'Development'
-description: 'Preview changes locally to update your docs'
+description: 'Setup local development environment for NovaCloud EIP'
 ---
 
 <Info>
   **Prerequisites**:
-  - Node.js version 19 or higher
-  - A docs repository with a `docs.json` file
+  - Node.js 18+
+  - Docker & Docker Compose
+  - 16GB+ RAM
+  - Git
 </Info>
 
-Follow these steps to install and run Mintlify on your operating system.
+## Local Setup
 
-<Steps>
-<Step title="Install the Mintlify CLI">
+### 1. Clone & Install CLI
 
 ```bash
+# Clone documentation
+git clone https://github.com/novatek-dev/docs.git
+cd docs
+
+# Install Mintlify CLI globally
 npm i -g mint
 ```
-</Step>
 
-<Step title="Preview locally">
+### 2. Run Preview
 
-Navigate to your docs directory where your `docs.json` file is located, and run the following command:
+Navigate to docs directory and start the preview:
 
 ```bash
 mint dev
 ```
 
-A local preview of your documentation will be available at `http://localhost:3000`.
+View documentation at `http://localhost:3000`.
 
-</Step>
-</Steps>
+## Docker Development Setup
 
-## Custom ports
+For full NovaCloud EIP development with containers:
 
-By default, Mintlify uses port 3000. You can customize the port Mintlify runs on by using the `--port` flag. For example, to run Mintlify on port 3333, use this command:
+```bash
+# Clone main repository
+git clone https://github.com/novatek-dev/novacloud-eip.git
+cd novacloud-eip
+
+# Copy environment
+cp .env.example .env
+
+# Start all containers
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+```
+
+### Container Ports
+
+| Container | Port | Service |
+|-----------|------|---------|
+| Next.js | 3000 | Web App |
+| Supabase/Postgres | 5432 | Database |
+| Ollama | 11434 | LLM API |
+| Qdrant | 6333 | Vector DB |
+| Neo4j | 7687 | Graph DB |
+| Neo4j Browser | 7474 | Graph UI |
+
+## Development Workflow
+
+### Editing Documentation
+
+1. Make changes to `.mdx` files in the docs repo
+2. Changes auto-reload at `http://localhost:3000`
+3. Commit and push to trigger automatic deployment
+
+### Custom Ports
+
+Run Mintlify on a custom port:
 
 ```bash
 mint dev --port 3333
 ```
 
-If you attempt to run Mintlify on a port that's already in use, it will use the next available port:
+### Code Quality
 
-```md
-Port 3000 is already in use. Trying 3001 instead.
-```
-
-## Mintlify versions
-
-Please note that each CLI release is associated with a specific version of Mintlify. If your local preview does not align with the production version, please update the CLI:
+Format and validate your documentation:
 
 ```bash
-npm mint update
-```
-
-## Validating links
-
-The CLI can assist with validating links in your documentation. To identify any broken links, use the following command:
-
-```bash
+# Check for broken links
 mint broken-links
+
+# Update CLI
+npm update -g mint
 ```
-
-## Deployment
-
-If the deployment is successful, you should see the following:
-
-<Frame>
-  <img src="/images/checks-passed.png" alt="Screenshot of a deployment confirmation message that says All checks have passed." style={{ borderRadius: '0.5rem' }} />
-</Frame>
-
-## Code formatting
-
-We suggest using extensions on your IDE to recognize and format MDX. If you're a VSCode user, consider the [MDX VSCode extension](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) for syntax highlighting, and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) for code formatting.
 
 ## Troubleshooting
 
 <AccordionGroup>
-  <Accordion title='Error: Could not load the "sharp" module using the darwin-arm64 runtime'>
-
-    This may be due to an outdated version of node. Try the following:
-    1. Remove the currently-installed version of the CLI: `npm remove -g mint`
-    2. Upgrade to Node v19 or higher.
-    3. Reinstall the CLI: `npm i -g mint`
+  <Accordion title="Port already in use">
+    Mintlify will automatically try the next available port. Check which process is using the port:
+    ```bash
+    lsof -i :3000
+    ```
   </Accordion>
 
-  <Accordion title="Issue: Encountering an unknown error">
-  
-    Solution: Go to the root of your device and delete the `~/.mintlify` folder. Then run `mint dev` again.
+  <Accordion title="Docker containers won't start">
+    Check system resources and logs:
+    ```bash
+    docker-compose logs [container-name]
+    docker system df
+    ```
+  </Accordion>
+
+  <Accordion title="Cannot find docs.json">
+    Ensure you're in the root directory of the docs repository where `docs.json` is located.
+  </Accordion>
+
+  <Accordion title="Node version error">
+    Update Node.js to version 18+:
+    ```bash
+    node --version
+    nvm install 18
+    nvm use 18
+    ```
   </Accordion>
 </AccordionGroup>
 
-Curious about what changed in the latest CLI version? Check out the [CLI changelog](https://www.npmjs.com/package/mintlify?activeTab=versions).
+## Building for Production
+
+```bash
+# Generate static build
+mint build
+
+# Test production build locally
+npm i -g serve
+serve -s dist
+```
+
+## Documentation Structure
+
+```
+docs/
+├── index.mdx                 # Homepage
+├── quickstart.mdx            # Getting started
+├── development.mdx           # This file
+├── docs.json                 # Navigation config
+├── ai-tools/                 # AI & RAG guides
+├── api-reference/            # API documentation
+├── essentials/               # Platform guides
+└── README.md                 # Project readme
+```
+
+## Need Help?
+
+- 📧 Support: support@novatek.com
+- 🐙 GitHub Issues: https://github.com/novatek-dev/docs/issues
+- 📖 Docs: https://docs.novatek.com
+- 🆘 Mintlify: https://mintlify.com/docs
