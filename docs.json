@@ -23,6 +23,28 @@
     "suggestEdit": true,
     "raiseIssue": true
   },
+  "quicklinks": [
+    {
+      "name": "Hızlı Başlangıç",
+      "url": "/quickstart",
+      "icon": "rocket"
+    },
+    {
+      "name": "Mimarilere Gövdeyle",
+      "url": "/essentials/settings",
+      "icon": "building"
+    },
+    {
+      "name": "API Referansı",
+      "url": "/api-reference/introduction",
+      "icon": "code"
+    },
+    {
+      "name": "Geliştirici Kılavuzu",
+      "url": "/development",
+      "icon": "laptop-code"
+    }
+  ],
   "navigation": {
     "tabs": [
       {
