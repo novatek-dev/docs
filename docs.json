@@ -6,17 +6,11 @@
   "colors": {
     "primary": "#9C27B0",
     "light": "#10B981",
-    "dark": "#6A1B9A",
-    "background": {
-      "light": "#FFFFFF",
-      "dark": "#0a0a0a"
-    }
+    "dark": "#6A1B9A"
   },
-  "favicon": "/favicon.svg",
   "logo": {
     "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg",
-    "href": "/"
+    "dark": "/logo/dark.svg"
   },
   "modeToggle": {
     "default": "light"
@@ -128,12 +122,7 @@
         "label": "Support",
         "href": "mailto:support@novatek.com"
       }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Start Building",
-      "href": "/quickstart"
-    }
+    ]
   },
   "anchors": [
     {
