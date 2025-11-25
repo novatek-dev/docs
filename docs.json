@@ -15,131 +15,16 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "İçerik",
+        "tab": "Dokümantasyon",
         "groups": [
           {
             "group": "Genel",
             "pages": [
-              "index",
-              "quickstart"
-            ]
-          },
-          {
-            "group": "İçerik Yönetimi",
-            "pages": [
-              "content/create",
-              "content/edit",
-              "content/delete",
-              "content/categories"
-            ]
-          },
-          {
-            "group": "Yayınlama",
-            "pages": [
-              "publishing/workflow",
-              "publishing/scheduling",
-              "publishing/approval",
-              "publishing/versioning"
-            ]
-          },
-          {
-            "group": "Medya",
-            "pages": [
-              "media/upload",
-              "media/gallery",
-              "media/optimization"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Ayarlar",
-        "groups": [
-          {
-            "group": "Sistem",
-            "pages": [
-              "settings/general",
-              "settings/branding",
-              "settings/seo"
-            ]
-          },
-          {
-            "group": "Yetkilendirme",
-            "pages": [
-              "settings/users",
-              "settings/roles",
-              "settings/permissions"
-            ]
-          },
-          {
-            "group": "Entegrasyonlar",
-            "pages": [
-              "settings/api",
-              "settings/webhooks",
-              "settings/third-party"
-            ]
-          },
-          {
-            "group": "Analitikler",
-            "pages": [
-              "analytics/overview",
-              "analytics/traffic",
-              "analytics/engagement",
-              "analytics/reports"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API",
-        "groups": [
-          {
-            "group": "Başlangıç",
-            "pages": [
-              "api/introduction",
-              "api/authentication"
-            ]
-          },
-          {
-            "group": "İçerik",
-            "pages": [
-              "api/content/list",
-              "api/content/create",
-              "api/content/update",
-              "api/content/delete"
-            ]
-          },
-          {
-            "group": "Yayınlama",
-            "pages": [
-              "api/publishing/schedule",
-              "api/publishing/approve",
-              "api/publishing/history"
-            ]
-          },
-          {
-            "group": "Medya",
-            "pages": [
-              "api/media/upload",
-              "api/media/list",
-              "api/media/delete"
+              "index"
             ]
           }
         ]
       }
     ]
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "GitHub",
-        "href": "https://github.com/novatek-dev/novacloud-eip"
-      }
-    ]
-  },
-  "footer": {
-    "socials": {
-      "github": "https://github.com/novatek-dev"
-    }
   }
 }
