@@ -1,87 +1,253 @@
 ---
-title: 'Navigation'
-description: 'The navigation field in docs.json defines the pages that go in the navigation menu'
-icon: 'map'
+title: 'Database Setup'
+description: 'Configure Supabase PostgreSQL and Neo4j Graph Database for NovaCloud EIP'
+icon: 'database'
 ---
 
-The navigation menu is the list of links on every website.
+## 🗄️ Database Architecture
 
-You will likely update `docs.json` every time you add a new page. Pages do not show up automatically.
+NovaCloud EIP uses two complementary databases for different workloads:
 
-## Navigation syntax
+### 1. Supabase (PostgreSQL) - Relational Data
+**Primary database for structured business data**
 
-Our navigation syntax is recursive which means you can make nested navigation groups. You don't need to include `.mdx` in page names.
+- **SQL Snapshots** - Automated daily imports from Logo ERP/CRM
+- **User Data** - Structured tables with ACID compliance
+- **Real-time Sync** - WebSocket support for live updates
+- **Storage** - File uploads and binary data
+- **Authentication** - JWT-based user management
 
-<CodeGroup>
+### 2. Neo4j - Graph Relationships
+**Secondary database for complex relationships and analytics**
 
-```json Regular Navigation
-"navigation": {
-  "tabs": [
-    {
-      "tab": "Docs",
-      "groups": [
-        {
-          "group": "Getting Started",
-          "pages": ["quickstart"]
-        }
-      ]
-    }
-  ]
-}
+- **Entity Relationships** - Customer → Orders → Products
+- **Network Analysis** - Find connected entities
+- **Pattern Matching** - Cypher queries for complex logic
+- **Graph Visualization** - Browser UI for exploration
+
+---
+
+## 🔧 PostgreSQL Configuration
+
+### Connection String
+```bash
+postgresql://username:password@localhost:5432/novacloud
 ```
 
-```json Nested Navigation
-"navigation": {
-  "tabs": [
-    {
-      "tab": "Docs",
-      "groups": [
-        {
-          "group": "Getting Started",
-          "pages": [
-            "quickstart",
-            {
-              "group": "Nested Reference Pages",
-              "pages": ["nested-reference-page"]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
+### Key Tables Structure
+```sql
+-- Core entities
+CREATE TABLE customers (id UUID PRIMARY KEY, name TEXT);
+CREATE TABLE orders (id UUID PRIMARY KEY, customer_id UUID REFERENCES customers);
+CREATE TABLE products (id UUID PRIMARY KEY, order_id UUID REFERENCES orders);
+
+-- AI/RAG support
+CREATE TABLE embeddings (id UUID PRIMARY KEY, vector vector(1536));
+CREATE TABLE sessions (id UUID PRIMARY KEY, user_id UUID);
 ```
 
-</CodeGroup>
+### Backup & Recovery
+```bash
+# Full database backup
+pg_dump postgresql://user:pass@localhost/novacloud > backup.sql
 
-## Folders
+# Restore from backup
+psql postgresql://user:pass@localhost/novacloud < backup.sql
 
-Simply put your MDX files in folders and update the paths in `docs.json`.
-
-For example, to have a page at `https://yoursite.com/your-folder/your-page` you would make a folder called `your-folder` containing an MDX file called `your-page.mdx`.
-
-<Warning>
-
-You cannot use `api` for the name of a folder unless you nest it inside another folder. Mintlify uses Next.js which reserves the top-level `api` folder for internal server calls. A folder name such as `api-reference` would be accepted.
-
-</Warning>
-
-```json Navigation With Folder
-"navigation": {
-  "tabs": [
-    {
-      "tab": "Docs",
-      "groups": [
-        {
-          "group": "Group Name",
-          "pages": ["your-folder/your-page"]
-        }
-      ]
-    }
-  ]
-}
+# Point-in-time recovery
+pg_basebackup -D backup_dir -Fp -P
 ```
 
-## Hidden pages
+---
 
-MDX files not included in `docs.json` will not show up in the sidebar but are accessible through the search bar and by linking directly to them.
+## 📊 Neo4j Configuration
+
+### Connection String
+```bash
+bolt://localhost:7687
+```
+
+### Graph Model Example
+```cypher
+// Create customer-order relationships
+CREATE (c:Customer {id: "123", name: "Acme Corp"})
+CREATE (o:Order {id: "456", date: "2024-01-15"})
+CREATE (p:Product {id: "789", name: "Widget"})
+CREATE (c)-[:PLACED]->(o)
+CREATE (o)-[:CONTAINS]->(p)
+
+// Query relationships
+MATCH (c:Customer)-[:PLACED]->(o:Order)-[:CONTAINS]->(p:Product)
+RETURN c.name, o.date, p.name
+```
+
+### Cypher Query Examples
+```cypher
+// Find high-value customers
+MATCH (c:Customer)-[r:PLACED]->(o:Order)
+WITH c, COUNT(o) as order_count, SUM(o.amount) as total_value
+WHERE total_value > 10000
+RETURN c.name, order_count, total_value
+
+// Network analysis - find influencers
+MATCH (n)-[r]->(m)
+RETURN n, COUNT(r) as influence_score
+ORDER BY influence_score DESC
+LIMIT 10
+```
+
+---
+
+## 🔄 Data Synchronization
+
+### SQL → Neo4j Sync Workflow
+```
+1. Daily SQL Snapshot (PostgreSQL)
+   ↓
+2. Extract relationships
+   ↓
+3. Transform to Cypher
+   ↓
+4. Update Neo4j graph
+   ↓
+5. Index embeddings in Qdrant
+```
+
+### Real-time Updates
+```bash
+# Enable PostgreSQL replication
+ALTER SYSTEM SET wal_level = logical;
+
+# Subscribe to changes
+SELECT * FROM your_table WHERE created_at > NOW() - INTERVAL '1 minute';
+```
+
+---
+
+## 🔐 Security & Access Control
+
+### PostgreSQL Row-Level Security
+```sql
+-- Create RLS policy for multi-tenant data
+ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
+CREATE POLICY customer_isolation ON customers
+  USING (user_id = current_user_id());
+```
+
+### Neo4j Authentication
+```bash
+# Set default credentials
+CALL dbms.security.changeUserPassword('neo4j', 'strong_password')
+
+# Create application user
+CALL dbms.security.createUser('app_user', 'password', false)
+CALL dbms.security.grantPrivilege('app_user', 'READ', 'GRAPH')
+```
+
+---
+
+## 📈 Performance Optimization
+
+### PostgreSQL Indexing
+```sql
+-- Create indexes for common queries
+CREATE INDEX idx_customer_name ON customers(name);
+CREATE INDEX idx_order_date ON orders(created_at DESC);
+CREATE INDEX idx_embedding_vector ON embeddings USING ivfflat(vector);
+```
+
+### Neo4j Index Strategy
+```cypher
+-- Create indexes on high-cardinality properties
+CREATE INDEX FOR (c:Customer) ON (c.id);
+CREATE INDEX FOR (o:Order) ON (o.date);
+CREATE TEXT INDEX FOR (p:Product) ON (p.name);
+```
+
+### Connection Pooling
+```javascript
+// Docker Compose configuration
+environment:
+  - DATABASE_POOL_SIZE=20
+  - NEO4J_POOL_SIZE=10
+  - QUERY_TIMEOUT=30000
+```
+
+---
+
+## 🚀 Scaling Strategies
+
+### Read Replicas (PostgreSQL)
+```bash
+# Primary database
+primary: postgres:5432
+
+# Read replicas
+replica1: postgres:5433
+replica2: postgres:5434
+```
+
+### Sharding (Neo4j)
+```cypher
+-- Distribute data by customer region
+MATCH (c:Customer {region: "US"})
+// Route to US-shard
+```
+
+---
+
+## ⚠️ Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="PostgreSQL Connection Failed">
+    ```bash
+    # Check PostgreSQL is running
+    docker-compose ps postgres
+    
+    # View logs
+    docker-compose logs postgres
+    
+    # Test connection
+    psql -h localhost -U postgres -d novacloud
+    ```
+  </Accordion>
+
+  <Accordion title="Neo4j Not Starting">
+    ```bash
+    # Check memory allocation
+    docker-compose logs neo4j | grep -i memory
+    
+    # Increase container memory in docker-compose.yml
+    mem_limit: 4g
+    ```
+  </Accordion>
+
+  <Accordion title="Slow Query Performance">
+    ```sql
+    -- PostgreSQL: Check slow logs
+    SELECT query, mean_exec_time FROM pg_stat_statements 
+    ORDER BY mean_exec_time DESC;
+    ```
+    
+    ```cypher
+    -- Neo4j: Profile query
+    PROFILE MATCH (n:Customer)-[:PLACED]->(o:Order) RETURN *;
+    ```
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+
+<Card title="Architecture Overview" icon="sitemap" href="/essentials/settings">
+  Learn about 5-container setup
+</Card>
+
+<Card title="API Reference" icon="terminal" href="/api-reference/introduction">
+  Query databases via REST API
+</Card>
+
+</CardGroup>
