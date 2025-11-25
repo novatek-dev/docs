@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "NovaCloud EIP",
-  "description": "Novatek EIP Enterprise Integration Platform - İçerik Yönetim ve Yayınlama Sistemi",
+  "description": "İçerik Yönetim Platformu",
   "colors": {
     "primary": "#9C27B0",
     "light": "#10B981",
@@ -43,7 +43,7 @@
             ]
           },
           {
-            "group": "Medya & Varlıklar",
+            "group": "Medya",
             "pages": [
               "media/upload",
               "media/gallery",
@@ -91,17 +91,17 @@
         ]
       },
       {
-        "tab": "API Referansı",
+        "tab": "API",
         "groups": [
           {
-            "group": "Giriş",
+            "group": "Başlangıç",
             "pages": [
               "api/introduction",
               "api/authentication"
             ]
           },
           {
-            "group": "İçerik API",
+            "group": "İçerik",
             "pages": [
               "api/content/list",
               "api/content/create",
@@ -110,7 +110,7 @@
             ]
           },
           {
-            "group": "Yayın API",
+            "group": "Yayınlama",
             "pages": [
               "api/publishing/schedule",
               "api/publishing/approve",
@@ -118,7 +118,7 @@
             ]
           },
           {
-            "group": "Medya API",
+            "group": "Medya",
             "pages": [
               "api/media/upload",
               "api/media/list",
@@ -127,48 +127,19 @@
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "GitHub",
-          "href": "https://github.com/novatek-dev",
-          "icon": "github"
-        },
-        {
-          "anchor": "Website",
-          "href": "https://novatek.com",
-          "icon": "globe"
-        },
-        {
-          "anchor": "Destek",
-          "href": "mailto:support@novatek.com",
-          "icon": "envelope"
-        }
-      ]
-    }
+    ]
   },
   "navbar": {
     "links": [
       {
         "label": "GitHub",
         "href": "https://github.com/novatek-dev/novacloud-eip"
-      },
-      {
-        "label": "Sorunlar",
-        "href": "https://github.com/novatek-dev/novacloud-eip/issues"
-      },
-      {
-        "label": "Destek",
-        "href": "mailto:support@novatek.com"
       }
     ]
   },
   "footer": {
     "socials": {
-      "github": "https://github.com/novatek-dev",
-      "linkedin": "https://linkedin.com/company/novatek-dev",
-      "website": "https://novatek.com"
+      "github": "https://github.com/novatek-dev"
     }
   }
 }
