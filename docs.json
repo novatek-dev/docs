@@ -57,6 +57,14 @@
               "essentials/markdown",
               "essentials/reusable-snippets"
             ]
+          },
+          {
+            "group": "Advanced Topics",
+            "pages": [
+              "ai-tools/cursor",
+              "ai-tools/claude-code",
+              "ai-tools/windsurf"
+            ]
           }
         ]
       },
